@@ -57,7 +57,6 @@ def wrap_callback(callback, data_type, nested_response: List[str] = None):
         return None
 
     def wrapper(response):
-
         if not data_type:
             return callback(True)
 
