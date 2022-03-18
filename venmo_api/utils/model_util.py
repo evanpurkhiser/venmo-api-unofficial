@@ -12,10 +12,10 @@ def string_to_timestamp(utc):
     if not utc:
         return
     try:
-        _date = datetime.strptime(utc, '%Y-%m-%dT%H:%M:%S')
+        _date = datetime.strptime(utc, "%Y-%m-%dT%H:%M:%S")
     # This except was added for comments (on transactions) - they display the date_created down to the microsecond
     except ValueError:
-        _date = datetime.strptime(utc, '%Y-%m-%dT%H:%M:%S.%f')
+        _date = datetime.strptime(utc, "%Y-%m-%dT%H:%M:%S.%f")
     return int(_date.timestamp())
 
 
@@ -28,7 +28,7 @@ def get_phone_model_from_json(app_json):
     app = {1: "iPhone", 4: "Android", 0: "Other"}
     _id = 0
     if app_json:
-        _id = app_json['id']
+        _id = app_json["id"]
 
     return app.get(int(_id))
 
@@ -45,8 +45,8 @@ def random_device_id():
 
         if char.isdigit():
             result.append(str(randint(0, 9)))
-        elif char == '-':
-            result.append('-')
+        elif char == "-":
+            result.append("-")
         else:
             result.append(choice(ascii_uppercase))
 

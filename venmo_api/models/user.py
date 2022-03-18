@@ -2,9 +2,21 @@ from venmo_api import string_to_timestamp, BaseModel, JSONSchema
 
 
 class User(BaseModel):
-
-    def __init__(self, user_id, username, first_name, last_name, display_name, phone,
-                 profile_picture_url, about, date_joined, is_group, is_active, json=None):
+    def __init__(
+        self,
+        user_id,
+        username,
+        first_name,
+        last_name,
+        display_name,
+        phone,
+        profile_picture_url,
+        about,
+        date_joined,
+        is_group,
+        is_active,
+        json=None,
+    ):
         """
         User model
         :param user_id:
@@ -51,15 +63,17 @@ class User(BaseModel):
 
         date_joined_timestamp = string_to_timestamp(parser.get_date_created())
 
-        return cls(user_id=parser.get_user_id(),
-                   username=parser.get_username(),
-                   first_name=parser.get_first_name(),
-                   last_name=parser.get_last_name(),
-                   display_name=parser.get_full_name(),
-                   phone=parser.get_phone(),
-                   profile_picture_url=parser.get_picture_url(),
-                   about=parser.get_about(),
-                   date_joined=date_joined_timestamp,
-                   is_group=parser.get_is_group(),
-                   is_active=parser.get_is_active(),
-                   json=json)
+        return cls(
+            user_id=parser.get_user_id(),
+            username=parser.get_username(),
+            first_name=parser.get_first_name(),
+            last_name=parser.get_last_name(),
+            display_name=parser.get_full_name(),
+            phone=parser.get_phone(),
+            profile_picture_url=parser.get_picture_url(),
+            about=parser.get_about(),
+            date_joined=date_joined_timestamp,
+            is_group=parser.get_is_group(),
+            is_active=parser.get_is_active(),
+            json=json,
+        )

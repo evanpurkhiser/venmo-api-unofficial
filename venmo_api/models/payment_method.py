@@ -35,14 +35,12 @@ class PaymentMethod(BaseModel):
         # Get the class for this payment, must be either VenmoBalance or BankAccount
         payment_class = payment_type.get(p_type)
         if not payment_class:
-            logging.warning(f"Skipped a payment_method; No schema existed for the payment_method: {p_type}")
+            logging.warning(
+                f"Skipped a payment_method; No schema existed for the payment_method: {p_type}"
+            )
             return
 
-        return payment_class(pid=pid,
-                             p_role=p_role,
-                             p_name=p_name,
-                             p_type=p_type,
-                             json=json)
+        return payment_class(pid=pid, p_role=p_role, p_name=p_name, p_type=p_type, json=json)
 
 
 class VenmoBalance(PaymentMethod, BaseModel):
@@ -54,20 +52,22 @@ class BankAccount(PaymentMethod, BaseModel):
     def __init__(self, pid, p_role, p_name, p_type, json=None):
         super().__init__(pid, p_role, p_name, p_type, json)
 
+
 class Card(PaymentMethod, BaseModel):
     def __init__(self, pid, p_role, p_name, p_type, json=None):
         super().__init__(pid, p_role, p_name, p_type, json)
 
+
 class PaymentRole(Enum):
-    DEFAULT = 'default'
-    BACKUP = 'backup'
-    NONE = 'none'
+    DEFAULT = "default"
+    BACKUP = "backup"
+    NONE = "none"
 
 
 class PaymentPrivacy(Enum):
-    PRIVATE = 'private'
-    PUBLIC = 'public'
-    FRIENDS = 'friends'
+    PRIVATE = "private"
+    PUBLIC = "public"
+    FRIENDS = "friends"
 
 
-payment_type = {'bank': BankAccount, 'balance': VenmoBalance, 'card': Card}
+payment_type = {"bank": BankAccount, "balance": VenmoBalance, "card": Card}

@@ -1,5 +1,4 @@
 class Page(list):
-
     def __init__(self):
         super().__init__()
         self.method = None
@@ -29,8 +28,8 @@ class Page(list):
 
         # use offset or before_id for paging, depending on the route
         if self.current_offset > -1:
-            self.kwargs['offset'] = self.current_offset + len(self)
+            self.kwargs["offset"] = self.current_offset + len(self)
         else:
-            self.kwargs['before_id'] = self[-1].id
+            self.kwargs["before_id"] = self[-1].id
 
         return self.method(**self.kwargs)

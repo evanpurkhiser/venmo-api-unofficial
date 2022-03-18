@@ -10,11 +10,11 @@ def validate_access_token(access_token):
     :param access_token:
     :return:
     """
-    token_re = r'^(Bearer)?(.+)$'
+    token_re = r"^(Bearer)?(.+)$"
     if not access_token:
         return
 
-    access_token = re.findall(token_re, access_token)[0][1].replace(' ', '')
+    access_token = re.findall(token_re, access_token)[0][1].replace(" ", "")
 
     return f"Bearer {access_token}"
 
@@ -27,11 +27,11 @@ def deserialize(response: Dict, data_type, nested_response: List[str] = None):
     :return: a single <Object> or a <Page> of objects (Objects can be User/Transaction/Payment/PaymentMethod)
     """
 
-    body = response.get('body')
+    body = response.get("body")
     if not body:
         raise Exception("Can't get an empty response body.")
 
-    data = body.get('data')
+    data = body.get("data")
     nested_response = nested_response or []
     for nested in nested_response:
         temp = data.get(nested)
@@ -61,7 +61,9 @@ def wrap_callback(callback, data_type, nested_response: List[str] = None):
         if not data_type:
             return callback(True)
 
-        deserialized_data = deserialize(response=response, data_type=data_type, nested_response=nested_response)
+        deserialized_data = deserialize(
+            response=response, data_type=data_type, nested_response=nested_response
+        )
         return callback(deserialized_data)
 
     return wrapper
@@ -84,14 +86,14 @@ def __get_objs_from_json_list(json_list, data_type):
 
 
 class Colors(Enum):
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
 
 
 def warn(message):
@@ -120,11 +122,13 @@ def get_user_id(user, user_id):
     :return user_id:
     """
     if not user and not user_id:
-        raise ArgumentMissingError(arguments=('target_user_id', 'target_user'))
+        raise ArgumentMissingError(arguments=("target_user_id", "target_user"))
 
     if not user_id:
         if type(user) != User:
-            raise ArgumentMissingError(f"Expected {User} for target_user, but received {type(user)}")
+            raise ArgumentMissingError(
+                f"Expected {User} for target_user, but received {type(user)}"
+            )
 
         user_id = user.id
 

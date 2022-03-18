@@ -1,12 +1,33 @@
-from venmo_api import string_to_timestamp, BaseModel, User, Comment, get_phone_model_from_json, JSONSchema
+from venmo_api import (
+    string_to_timestamp,
+    BaseModel,
+    User,
+    Comment,
+    get_phone_model_from_json,
+    JSONSchema,
+)
 from enum import Enum
 
 
 class Transaction(BaseModel):
-
-    def __init__(self, story_id, payment_id, date_completed, date_created,
-                 date_updated, payment_type, amount, audience, status,
-                 note, device_used, actor, target, comments, json=None):
+    def __init__(
+        self,
+        story_id,
+        payment_id,
+        date_completed,
+        date_created,
+        date_updated,
+        payment_type,
+        amount,
+        audience,
+        status,
+        note,
+        device_used,
+        actor,
+        target,
+        comments,
+        json=None,
+    ):
         """
         Transaction model
         :param story_id:
@@ -74,36 +95,40 @@ class Transaction(BaseModel):
         device_used = get_phone_model_from_json(parser.get_actor_app())
 
         comments_list = parser.get_comments()
-        comments = [Comment.from_json(json=comment) for comment in comments_list] if comments_list else []
+        comments = (
+            [Comment.from_json(json=comment) for comment in comments_list] if comments_list else []
+        )
 
-        return cls(story_id=parser.get_story_id(),
-                   payment_id=parser.get_payment_id(),
-                   date_completed=date_completed,
-                   date_created=date_created,
-                   date_updated=date_updated,
-                   payment_type=parser.get_type(),
-                   amount=parser.get_amount(),
-                   audience=parser.get_audience(),
-                   note=parser.get_story_note(),
-                   status=parser.get_status(),
-                   device_used=device_used,
-                   actor=actor,
-                   target=target,
-                   comments=comments,
-                   json=json)
+        return cls(
+            story_id=parser.get_story_id(),
+            payment_id=parser.get_payment_id(),
+            date_completed=date_completed,
+            date_created=date_created,
+            date_updated=date_updated,
+            payment_type=parser.get_type(),
+            amount=parser.get_amount(),
+            audience=parser.get_audience(),
+            note=parser.get_story_note(),
+            status=parser.get_status(),
+            device_used=device_used,
+            actor=actor,
+            target=target,
+            comments=comments,
+            json=json,
+        )
 
 
 class TransactionType(Enum):
-    PAYMENT = 'payment'
+    PAYMENT = "payment"
     # merchant refund
-    REFUND = 'refund'
+    REFUND = "refund"
     # to/from bank account
-    TRANSFER = 'transfer'
+    TRANSFER = "transfer"
     # add money to debit card
-    TOP_UP = 'top_up'
+    TOP_UP = "top_up"
     # debit card purchase
-    AUTHORIZATION = 'authorization'
+    AUTHORIZATION = "authorization"
     # debit card atm withdrawal
-    ATM_WITHDRAWAL = 'atm_withdrawal'
+    ATM_WITHDRAWAL = "atm_withdrawal"
 
-    DISBURSEMENT = 'disbursement'
+    DISBURSEMENT = "disbursement"
