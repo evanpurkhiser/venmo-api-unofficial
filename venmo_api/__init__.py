@@ -5,7 +5,6 @@ from .utils.model_util import (
 )
 from .models.exception import *
 from .models.base_model import BaseModel
-from .models.json_schema import JSONSchema
 from .models.user import User
 from .models.mention import Mention
 from .models.comment import Comment
@@ -49,7 +48,6 @@ __all__ = [
     "confirm",
     "get_user_id",
     "validate_access_token",
-    "JSONSchema",
     "User",
     "Mention",
     "Comment",

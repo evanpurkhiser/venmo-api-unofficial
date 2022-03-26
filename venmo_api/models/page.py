@@ -1,4 +1,10 @@
-class Page(list):
+from typing import List, TypeVar
+
+
+T = TypeVar("T")
+
+
+class Page(List[T]):
     def __init__(self):
         super().__init__()
         self.method = None
@@ -8,10 +14,6 @@ class Page(list):
     def set_method(self, method, kwargs, current_offset=-1):
         """
         set the method and kwargs for paging. current_offset is provided for routes that require offset.
-        :param method:
-        :param kwargs:
-        :param current_offset:
-        :return:
         """
         self.method = method
         self.kwargs = kwargs
@@ -21,7 +23,6 @@ class Page(list):
     def get_next_page(self):
         """
         Get the next page of data. Returns empty Page if none exists
-        :return:
         """
         if not self.kwargs or not self.method or len(self) == 0:
             return self.__init__()

@@ -1,11 +1,11 @@
-from venmo_api import string_to_timestamp, User, BaseModel, JSONSchema
+from venmo_api import string_to_timestamp, User, BaseModel
 from enum import Enum
 
 
 class Payment(BaseModel):
     def __init__(
         self,
-        id_,
+        id,
         actor,
         target,
         action,
@@ -20,21 +20,9 @@ class Payment(BaseModel):
     ):
         """
         Payment model
-        :param id_:
-        :param actor:
-        :param target:
-        :param action:
-        :param amount:
-        :param audience:
-        :param date_created:
-        :param date_reminded:
-        :param date_completed:
-        :param note:
-        :param status:
-        :param json:
         """
         super().__init__()
-        self.id = id_
+        self.id = id
         self.actor = actor
         self.target = target
         self.action = action
@@ -51,26 +39,22 @@ class Payment(BaseModel):
     def from_json(cls, json):
         """
         init a new Payment form JSON
-        :param json:
-        :return:
         """
         if not json:
             return
 
-        parser = JSONSchema.payment(json)
-
         return cls(
-            id_=parser.get_id(),
-            actor=User.from_json(parser.get_actor()),
-            target=User.from_json(parser.get_target()),
-            action=parser.get_action(),
-            amount=parser.get_amount(),
-            audience=parser.get_amount(),
-            date_created=string_to_timestamp(parser.get_date_created()),
-            date_reminded=string_to_timestamp(parser.get_date_reminded()),
-            date_completed=string_to_timestamp(parser.get_date_completed()),
-            note=parser.get_note(),
-            status=PaymentStatus(parser.get_status()),
+            id=json.get("id"),
+            actor=User.from_json(json.get("actor")),
+            target=User.from_json(json.get("target").get("user")),
+            action=json.get("action"),
+            amount=json.get("amount"),
+            audience=json.get("audience"),
+            date_created=string_to_timestamp(json.get("date_created")),
+            date_reminded=string_to_timestamp(json.get("date_reminded")),
+            date_completed=string_to_timestamp(json.get("date_completed")),
+            note=json.get("note"),
+            status=PaymentStatus(json.get("status")),
             json=json,
         )
 

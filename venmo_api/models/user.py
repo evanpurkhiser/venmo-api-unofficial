@@ -1,4 +1,4 @@
-from venmo_api import string_to_timestamp, BaseModel, JSONSchema
+from venmo_api import string_to_timestamp, BaseModel
 
 
 class User(BaseModel):
@@ -19,19 +19,6 @@ class User(BaseModel):
     ):
         """
         User model
-        :param user_id:
-        :param username:
-        :param first_name:
-        :param last_name:
-        :param display_name:
-        :param phone:
-        :param profile_picture_url:
-        :param about:
-        :param date_joined:
-        :param is_group:
-        :param is_active:
-        :param json: full_json
-        :return:
         """
         super().__init__()
 
@@ -52,14 +39,11 @@ class User(BaseModel):
     def from_json(cls, json, is_profile=False):
         """
         init a new user form JSON
-        :param json:
-        :param is_profile:
-        :return:
         """
         if not json:
             return
 
-        parser = JSONSchema.user(json, is_profile=is_profile)
+        parser = UserParser(json, is_profile=is_profile)
 
         date_joined_timestamp = string_to_timestamp(parser.get_date_created())
 
@@ -77,3 +61,83 @@ class User(BaseModel):
             is_active=parser.get_is_active(),
             json=json,
         )
+
+
+class UserParser:
+    def __init__(self, json, is_profile=False):
+
+        if not json:
+            return
+
+        self.json = json
+        self.is_profile = is_profile
+
+        if is_profile:
+            self.parser = profile_json_format
+        else:
+            self.parser = user_json_format
+
+    def get_user_id(self):
+        return self.json.get(self.parser.get("user_id"))
+
+    def get_username(self):
+        return self.json.get(self.parser.get("username"))
+
+    def get_first_name(self):
+        return self.json.get(self.parser.get("first_name"))
+
+    def get_last_name(self):
+        return self.json.get(self.parser.get("last_name"))
+
+    def get_full_name(self):
+        return self.json.get(self.parser.get("full_name"))
+
+    def get_phone(self):
+        return self.json.get(self.parser.get("phone"))
+
+    def get_picture_url(self):
+        return self.json.get(self.parser.get("picture_url"))
+
+    def get_about(self):
+        return self.json.get(self.parser.get("about"))
+
+    def get_date_created(self):
+        return self.json.get(self.parser.get("date_created"))
+
+    def get_is_group(self):
+        if self.is_profile:
+            return False
+        return self.json.get(self.parser.get("is_group"))
+
+    def get_is_active(self):
+        if self.is_profile:
+            return False
+        return self.json.get(self.parser.get("is_active"))
+
+
+user_json_format = {
+    "user_id": "id",
+    "username": "username",
+    "first_name": "first_name",
+    "last_name": "last_name",
+    "full_name": "display_name",
+    "phone": "phone",
+    "picture_url": "profile_picture_url",
+    "about": "about",
+    "date_created": "date_joined",
+    "is_group": "is_group",
+    "is_active": "is_active",
+}
+
+profile_json_format = {
+    "user_id": "external_id",
+    "username": "username",
+    "first_name": "firstname",
+    "last_name": "lastname",
+    "full_name": "name",
+    "phone": "phone",
+    "picture_url": "picture",
+    "about": "about",
+    "date_created": "date_created",
+    "is_business": "is_business",
+}

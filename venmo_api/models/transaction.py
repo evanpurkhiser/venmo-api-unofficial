@@ -4,7 +4,6 @@ from venmo_api import (
     User,
     Comment,
     get_phone_model_from_json,
-    JSONSchema,
 )
 from enum import Enum
 
@@ -30,21 +29,6 @@ class Transaction(BaseModel):
     ):
         """
         Transaction model
-        :param story_id:
-        :param payment_id:
-        :param date_completed:
-        :param date_created:
-        :param date_updated:
-        :param payment_type:
-        :param amount:
-        :param audience:
-        :param status:
-        :param note:
-        :param device_used:
-        :param actor:
-        :param target:
-        :param comments:
-        :param json:
         """
         super().__init__()
 
@@ -73,43 +57,39 @@ class Transaction(BaseModel):
         """
         Create a new Transaction from the given json.
         This only works for transactions, skipping refunds and bank transfers.
-        :param json:
-        :return:
         """
 
         if not json:
             return
 
-        parser = JSONSchema.transaction(json)
-        transaction_type = TransactionType(parser.get_transaction_type())
+        payment_json = json.get("payment")
+        transaction_type = TransactionType(json.get("type"))
 
         # Currently only handles Payment-type transactions
         if transaction_type is not TransactionType.PAYMENT:
             return
 
-        date_created = string_to_timestamp(parser.get_date_created())
-        date_updated = string_to_timestamp(parser.get_date_updated())
-        date_completed = string_to_timestamp(parser.get_date_completed())
-        target = User.from_json(json=parser.get_target())
-        actor = User.from_json(json=parser.get_actor())
-        device_used = get_phone_model_from_json(parser.get_actor_app())
+        date_created = string_to_timestamp(json.get("date_created"))
+        date_updated = string_to_timestamp(json.get("date_updated"))
+        date_completed = string_to_timestamp(json.get("date_completed"))
+        target = User.from_json(payment_json.get("target").get("user"))
+        actor = User.from_json(payment_json.get("actor"))
+        device_used = get_phone_model_from_json(json.get("app"))
 
-        comments_list = parser.get_comments()
-        comments = (
-            [Comment.from_json(json=comment) for comment in comments_list] if comments_list else []
-        )
+        comments = json.get("comments", {}).get("comments_list")
+        comments = [Comment.from_json(json=comment) for comment in comments] if comments else []
 
         return cls(
-            story_id=parser.get_story_id(),
-            payment_id=parser.get_payment_id(),
+            story_id=json.get("id"),
+            payment_id=payment_json.get("id"),
+            payment_type=payment_json.get("action"),
+            amount=payment_json.get("amount"),
+            audience=json.get("audience"),
+            note=payment_json.get("note"),
+            status=payment_json.get("status"),
             date_completed=date_completed,
             date_created=date_created,
             date_updated=date_updated,
-            payment_type=parser.get_type(),
-            amount=parser.get_amount(),
-            audience=parser.get_audience(),
-            note=parser.get_story_note(),
-            status=parser.get_status(),
             device_used=device_used,
             actor=actor,
             target=target,
@@ -130,5 +110,5 @@ class TransactionType(Enum):
     AUTHORIZATION = "authorization"
     # debit card atm withdrawal
     ATM_WITHDRAWAL = "atm_withdrawal"
-
+    # ???
     DISBURSEMENT = "disbursement"

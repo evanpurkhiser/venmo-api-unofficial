@@ -1,20 +1,14 @@
-from venmo_api import string_to_timestamp, BaseModel, User, Mention, JSONSchema
+from venmo_api import string_to_timestamp, BaseModel, User, Mention
 
 
 class Comment(BaseModel):
-    def __init__(self, id_, message, date_created, mentions, user, json=None):
+    def __init__(self, id, message, date_created, mentions, user, json=None):
         """
         Comment model
-        :param id_:
-        :param message:
-        :param date_created:
-        :param mentions:
-        :param user:
-        :param json:
         """
         super().__init__()
 
-        self.id = id_
+        self.id = id
         self.message = message
         self.user = user
 
@@ -27,25 +21,19 @@ class Comment(BaseModel):
     def from_json(cls, json):
         """
         Create a new Comment from the given json.
-        :param json:
-        :return:
         """
 
         if not json:
             return
 
-        parser = JSONSchema.comment(json)
-
-        mentions_list = parser.get_mentions()
-        mentions = (
-            [Mention.from_json(mention) for mention in mentions_list] if mentions_list else []
-        )
+        mentions = json.get("mentions", {}).get("data")
+        mentions = [Mention.from_json(mention) for mention in mentions] if mentions else []
 
         return cls(
-            id_=parser.get_id(),
-            message=parser.get_message(),
-            date_created=string_to_timestamp(parser.get_date_created()),
+            id=json.get("id"),
+            message=json.get("message"),
+            date_created=string_to_timestamp(json.get("date_created")),
+            user=User.from_json(json.get("user")),
             mentions=mentions,
-            user=User.from_json(parser.get_user()),
             json=json,
         )
