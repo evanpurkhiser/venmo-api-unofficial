@@ -82,8 +82,6 @@ class UserParser:
         else:
             self.parser = profile_json_format
 
-        print(self.user)
-
     def get_user_id(self):
         return self.user.get(self.parser.get("user_id"))
 
