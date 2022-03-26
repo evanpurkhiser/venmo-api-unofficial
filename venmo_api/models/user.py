@@ -38,14 +38,14 @@ class User(BaseModel):
         self._json = json
 
     @classmethod
-    def from_json(cls, json, is_profile=False):
+    def from_json(cls, json):
         """
         init a new user form JSON
         """
         if not json:
             return
 
-        parser = UserParser(json, is_profile=is_profile)
+        parser = UserParser(json)
 
         date_joined_timestamp = string_to_timestamp(parser.get_date_created())
 
@@ -67,16 +67,17 @@ class User(BaseModel):
 
 
 class UserParser:
-    def __init__(self, json, is_profile=False):
+    def __init__(self, json):
 
         if not json:
             return
 
         self.json = json
-        self.user = json["user"]
-        self.is_profile = is_profile
 
-        if is_profile:
+        self.is_profile = "user" not in json
+        self.user = json["user"] if not self.is_profile else json
+
+        if self.is_profile:
             self.parser = profile_json_format
         else:
             self.parser = user_json_format
@@ -111,6 +112,7 @@ class UserParser:
     def get_balance(self):
         if self.is_profile:
             return None
+
         balance = float(self.json.get(self.parser.get("balance")))
         return int(balance * 100)
 
@@ -141,7 +143,7 @@ user_json_format = {
 }
 
 profile_json_format = {
-    "user_id": "external_id",
+    "user_id": "id",
     "username": "username",
     "first_name": "firstname",
     "last_name": "lastname",
@@ -150,6 +152,5 @@ profile_json_format = {
     "picture_url": "picture",
     "about": "about",
     "date_created": "date_created",
-    "is_business": "is_business",
     "balance": "balance",
 }
