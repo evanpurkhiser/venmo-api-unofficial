@@ -110,7 +110,7 @@ class UserApi(object):
         callback=None,
         offset: int = 0,
         limit: int = 3337,
-    ) -> Union[Page, None]:
+    ) -> Union[Page[User], None]:
         """
         Get ([user_id]'s or [user]'s) friends list as a list of <User>s
         :return users_list: <list> A list of <User> objects or empty
@@ -145,7 +145,7 @@ class UserApi(object):
         callback=None,
         limit: int = 50,
         before_id=None,
-    ) -> Union[Page, None]:
+    ) -> Union[Page[Transaction], None]:
         """
         Get ([user_id]'s or [user]'s) transactions visible to yourself as a list of <Transaction>s
         :param user_id:
@@ -189,7 +189,7 @@ class UserApi(object):
         callback=None,
         limit: int = 50,
         before_id=None,
-    ) -> Union[Page, None]:
+    ) -> Union[Page[Transaction], None]:
         """
         Get the transactions between two users. Note that user_one must be the owner of the access token.
         Otherwise it raises an unauthorized error.
