@@ -110,7 +110,7 @@ class PaymentApi(object):
 
     def send_money(
         self,
-        amount: float,
+        amount: int,
         note: str,
         target_user_id: int = None,
         funding_source_id: str = None,
@@ -121,7 +121,7 @@ class PaymentApi(object):
         """
         send [amount] money with [note] to the ([target_user_id] or [target_user]) from the [funding_source_id]
         If no [funding_source_id] is provided, it will find the default source_id and uses that.
-        :param amount: <float>
+        :param amount: <int> amount of money to send (in cents)
         :param note: <str>
         :param funding_source_id: <str> Your payment_method id for this payment
         :param privacy_setting: <PaymentPrivacy> PRIVATE/FRIENDS/PUBLIC (enum)
@@ -132,7 +132,7 @@ class PaymentApi(object):
         """
 
         return self.__send_or_request_money(
-            amount=amount,
+            amount=float(amount / 100),
             note=note,
             is_send_money=True,
             funding_source_id=funding_source_id,
@@ -144,7 +144,7 @@ class PaymentApi(object):
 
     def request_money(
         self,
-        amount: float,
+        amount: int,
         note: str,
         target_user_id: int = None,
         privacy_setting: PaymentPrivacy = PaymentPrivacy.PRIVATE,
@@ -153,7 +153,7 @@ class PaymentApi(object):
     ) -> Union[bool, None]:
         """
         Request [amount] money with [note] from the ([target_user_id] or [target_user])
-        :param amount: <float> amount of money to be requested
+        :param amount: <int> amount of money to be requested (in cents)
         :param note: <str> message/note of the transaction
         :param privacy_setting: <PaymentPrivacy> PRIVATE/FRIENDS/PUBLIC (enum)
         :param target_user_id: <str> the user id of the person you are asking the money from
@@ -162,7 +162,7 @@ class PaymentApi(object):
         :return: <bool> Either the transaction was successful or an exception will rise.
         """
         return self.__send_or_request_money(
-            amount=amount,
+            amount=flaot(amount / 100),
             note=note,
             is_send_money=False,
             funding_source_id=None,

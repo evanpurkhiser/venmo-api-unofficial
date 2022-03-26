@@ -79,7 +79,7 @@ class ArgumentMissingError(Exception):
 
 class NoPaymentMethodFoundError(Exception):
     def __init__(self, msg: str = None, reason=None):
-        self.msg = msg or ("No eligible payment method found." + "" or reason)
+        self.msg = msg or ("No eligible payment method found. " + (reason or ""))
         super(NoPaymentMethodFoundError, self).__init__(self.msg)
 
 
@@ -115,6 +115,15 @@ class GeneralPaymentError(Exception):
         super(GeneralPaymentError, self).__init__(self.msg)
 
 
+# ======= Transfers =======
+
+
+class NotTransferOptionsException(Exception):
+    def __init__(self, msg: str = None, reason=None):
+        self.msg = msg or ("No eligible transfer options found. " + (reason or ""))
+        super(NotTransferOptionsException, self).__init__(self.msg)
+
+
 __all__ = [
     "AuthenticationFailedError",
     "InvalidArgumentError",
@@ -128,4 +137,5 @@ __all__ = [
     "NoPendingPaymentToUpdateError",
     "NotEnoughBalanceError",
     "GeneralPaymentError",
+    "NotTransferOptionsException",
 ]

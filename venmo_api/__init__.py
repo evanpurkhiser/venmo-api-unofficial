@@ -9,6 +9,7 @@ from .models.user import User
 from .models.mention import Mention
 from .models.comment import Comment
 from .models.transaction import Transaction
+from .models.transfer import TransferType, TransferOptions, TransferTarget
 from .models.payment import Payment, PaymentStatus
 from .models.payment_method import PaymentMethod, PaymentRole, PaymentPrivacy
 from .models.page import Page
@@ -23,6 +24,7 @@ from .utils.api_util import (
 from .utils.api_client import ApiClient
 from .apis.auth_api import AuthenticationApi
 from .apis.payment_api import PaymentApi
+from .apis.transfer_api import TransferApi
 from .apis.user_api import UserApi
 from .venmo import Client
 
@@ -52,6 +54,9 @@ __all__ = [
     "Mention",
     "Comment",
     "Transaction",
+    "TransferType",
+    "TransferTarget",
+    "TransferOptions",
     "Payment",
     "PaymentStatus",
     "PaymentMethod",
@@ -63,5 +68,6 @@ __all__ = [
     "AuthenticationApi",
     "UserApi",
     "PaymentApi",
+    "TransferApi",
     "Client",
 ]

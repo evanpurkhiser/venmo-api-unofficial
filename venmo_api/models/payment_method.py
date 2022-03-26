@@ -19,7 +19,6 @@ class PaymentMethod(BaseModel):
 
     @classmethod
     def from_json(cls, json: Dict):
-
         id = json.get("id")
         role = json.get("peer_payment_role")
         name = json.get("name")

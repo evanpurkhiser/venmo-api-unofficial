@@ -2,6 +2,7 @@ from venmo_api import (
     ApiClient,
     UserApi,
     PaymentApi,
+    TransferApi,
     AuthenticationApi,
     validate_access_token,
 )
@@ -19,6 +20,7 @@ class Client(object):
         self.user = UserApi(self.__api_client)
         self.__profile = self.user.get_my_profile()
         self.payment = PaymentApi(profile=self.__profile, api_client=self.__api_client)
+        self.transfer = TransferApi(profile=self.__profile, api_client=self.__api_client)
 
     def my_profile(self, force_update=False):
         """

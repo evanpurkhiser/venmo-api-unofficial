@@ -111,7 +111,8 @@ class UserParser:
     def get_balance(self):
         if self.is_profile:
             return None
-        return self.json.get(self.parser.get("balance"))
+        balance = float(self.json.get(self.parser.get("balance")))
+        return int(balance * 100)
 
     def get_is_group(self):
         if self.is_profile:

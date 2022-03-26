@@ -83,7 +83,7 @@ class Transaction(BaseModel):
             story_id=json.get("id"),
             payment_id=payment_json.get("id"),
             payment_type=payment_json.get("action"),
-            amount=payment_json.get("amount"),
+            amount=int(float(payment_json.get("amount")) * 100),
             audience=json.get("audience"),
             note=payment_json.get("note"),
             status=payment_json.get("status"),
