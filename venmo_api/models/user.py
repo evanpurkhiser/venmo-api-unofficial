@@ -15,6 +15,7 @@ class User(BaseModel):
         date_joined,
         is_group,
         is_active,
+        balance,
         json=None,
     ):
         """
@@ -33,6 +34,7 @@ class User(BaseModel):
         self.date_joined = date_joined
         self.is_group = is_group
         self.is_active = is_active
+        self.balance = balance
         self._json = json
 
     @classmethod
@@ -59,6 +61,7 @@ class User(BaseModel):
             date_joined=date_joined_timestamp,
             is_group=parser.get_is_group(),
             is_active=parser.get_is_active(),
+            balance=parser.get_balance(),
             json=json,
         )
 
@@ -70,6 +73,7 @@ class UserParser:
             return
 
         self.json = json
+        self.user = json["user"]
         self.is_profile = is_profile
 
         if is_profile:
@@ -78,36 +82,41 @@ class UserParser:
             self.parser = user_json_format
 
     def get_user_id(self):
-        return self.json.get(self.parser.get("user_id"))
+        return self.user.get(self.parser.get("user_id"))
 
     def get_username(self):
-        return self.json.get(self.parser.get("username"))
+        return self.user.get(self.parser.get("username"))
 
     def get_first_name(self):
-        return self.json.get(self.parser.get("first_name"))
+        return self.user.get(self.parser.get("first_name"))
 
     def get_last_name(self):
-        return self.json.get(self.parser.get("last_name"))
+        return self.user.get(self.parser.get("last_name"))
 
     def get_full_name(self):
-        return self.json.get(self.parser.get("full_name"))
+        return self.user.get(self.parser.get("full_name"))
 
     def get_phone(self):
-        return self.json.get(self.parser.get("phone"))
+        return self.user.get(self.parser.get("phone"))
 
     def get_picture_url(self):
-        return self.json.get(self.parser.get("picture_url"))
+        return self.user.get(self.parser.get("picture_url"))
 
     def get_about(self):
-        return self.json.get(self.parser.get("about"))
+        return self.user.get(self.parser.get("about"))
 
     def get_date_created(self):
-        return self.json.get(self.parser.get("date_created"))
+        return self.user.get(self.parser.get("date_created"))
+
+    def get_balance(self):
+        if self.is_profile:
+            return None
+        return self.json.get(self.parser.get("balance"))
 
     def get_is_group(self):
         if self.is_profile:
             return False
-        return self.json.get(self.parser.get("is_group"))
+        return self.user.get(self.parser.get("is_group"))
 
     def get_is_active(self):
         if self.is_profile:
@@ -127,6 +136,7 @@ user_json_format = {
     "date_created": "date_joined",
     "is_group": "is_group",
     "is_active": "is_active",
+    "balance": "balance",
 }
 
 profile_json_format = {
@@ -140,4 +150,5 @@ profile_json_format = {
     "about": "about",
     "date_created": "date_created",
     "is_business": "is_business",
+    "balance": "balance",
 }

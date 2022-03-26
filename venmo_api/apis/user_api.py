@@ -4,36 +4,27 @@ from typing import List, Union
 
 class UserApi(object):
     def __init__(self, api_client):
-        super().__init__()
         self.__api_client = api_client
-        self.__profile = None
 
-    def get_my_profile(self, callback=None, force_update=False) -> Union[User, None]:
+    def get_my_profile(self, callback=None) -> Union[User, None]:
         """
         Get my profile info and return as a <User>
         :return my_profile: <User>
         """
-        if self.__profile and not force_update:
-            return self.__profile
-
-        # Prepare the request
         resource_path = "/account"
-        nested_response = ["user"]
-        wrapped_callback = wrap_callback(
-            callback=callback, data_type=User, nested_response=nested_response
-        )
-        # Make the request
+        wrapped_callback = wrap_callback(callback=callback, data_type=User)
+
         response = self.__api_client.call_api(
             resource_path=resource_path, method="GET", callback=wrapped_callback
         )
-        # Return None if threaded
+
         if callback:
             return
 
-        self.__profile = deserialize(
-            response=response, data_type=User, nested_response=nested_response
+        return deserialize(
+            response=response,
+            data_type=User,
         )
-        return self.__profile
 
     def search_for_users(
         self,

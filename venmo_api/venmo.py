@@ -26,7 +26,7 @@ class Client(object):
         :return:
         """
         if force_update:
-            self.__profile = self.user.get_my_profile(force_update=force_update)
+            self.__profile = self.user.get_my_profile()
 
         return self.__profile
 
