@@ -54,7 +54,7 @@ class User(BaseModel):
             username=parser.get_username(),
             first_name=parser.get_first_name(),
             last_name=parser.get_last_name(),
-            display_name=parser.get_full_name(),
+            display_name=parser.get_display_name(),
             phone=parser.get_phone(),
             profile_picture_url=parser.get_picture_url(),
             about=parser.get_about(),
@@ -74,13 +74,15 @@ class UserParser:
 
         self.json = json
 
-        self.is_profile = "user" not in json
-        self.user = json["user"] if not self.is_profile else json
+        self.has_user = "user" not in json
+        self.user = json if self.has_user else json["user"]
 
-        if self.is_profile:
-            self.parser = profile_json_format
-        else:
+        if self.has_user:
             self.parser = user_json_format
+        else:
+            self.parser = profile_json_format
+
+        print(self.user)
 
     def get_user_id(self):
         return self.user.get(self.parser.get("user_id"))
@@ -94,8 +96,8 @@ class UserParser:
     def get_last_name(self):
         return self.user.get(self.parser.get("last_name"))
 
-    def get_full_name(self):
-        return self.user.get(self.parser.get("full_name"))
+    def get_display_name(self):
+        return self.user.get(self.parser.get("display_name"))
 
     def get_phone(self):
         return self.user.get(self.parser.get("phone"))
@@ -110,19 +112,19 @@ class UserParser:
         return self.user.get(self.parser.get("date_created"))
 
     def get_balance(self):
-        if self.is_profile:
+        if self.has_user:
             return None
 
         balance = float(self.json.get(self.parser.get("balance")))
         return int(balance * 100)
 
     def get_is_group(self):
-        if self.is_profile:
+        if self.has_user:
             return False
         return self.user.get(self.parser.get("is_group"))
 
     def get_is_active(self):
-        if self.is_profile:
+        if self.has_user:
             return False
         return self.json.get(self.parser.get("is_active"))
 
@@ -132,7 +134,7 @@ user_json_format = {
     "username": "username",
     "first_name": "first_name",
     "last_name": "last_name",
-    "full_name": "display_name",
+    "display_name": "display_name",
     "phone": "phone",
     "picture_url": "profile_picture_url",
     "about": "about",
@@ -147,7 +149,7 @@ profile_json_format = {
     "username": "username",
     "first_name": "firstname",
     "last_name": "lastname",
-    "full_name": "name",
+    "display_name": "name",
     "phone": "phone",
     "picture_url": "picture",
     "about": "about",
