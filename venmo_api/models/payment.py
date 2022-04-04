@@ -48,7 +48,7 @@ class Payment(BaseModel):
             actor=User.from_json(json.get("actor")),
             target=User.from_json(json.get("target").get("user")),
             action=json.get("action"),
-            amount=int(float(json.get("amount")) * 100),
+            amount=int(json.get("amount").replace('.', '')),
             audience=json.get("audience"),
             date_created=string_to_timestamp(json.get("date_created")),
             date_reminded=string_to_timestamp(json.get("date_reminded")),

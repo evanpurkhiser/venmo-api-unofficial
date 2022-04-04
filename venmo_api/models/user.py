@@ -113,8 +113,7 @@ class UserParser:
         if self.has_user:
             return None
 
-        balance = float(self.json.get(self.parser.get("balance")))
-        return int(balance * 100)
+        return int(self.json.get(self.parser.get("balance")).replace(".", ""))
 
     def get_is_group(self):
         if self.has_user:
