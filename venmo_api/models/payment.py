@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from venmo_api import string_to_timestamp, User, BaseModel
 from enum import Enum
 
@@ -48,7 +50,7 @@ class Payment(BaseModel):
             actor=User.from_json(json.get("actor")),
             target=User.from_json(json.get("target").get("user")),
             action=json.get("action"),
-            amount=int(json.get("amount").replace('.', '')),
+            amount=int(Decimal(json.get("amount")) * 100),
             audience=json.get("audience"),
             date_created=string_to_timestamp(json.get("date_created")),
             date_reminded=string_to_timestamp(json.get("date_reminded")),

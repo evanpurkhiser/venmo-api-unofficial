@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from venmo_api import string_to_timestamp, BaseModel
 
 
@@ -113,7 +115,8 @@ class UserParser:
         if self.has_user:
             return None
 
-        return int(self.json.get(self.parser.get("balance")).replace(".", ""))
+        balance = Decimal(self.json.get(self.parser.get("balance")))
+        return int(balance * 100)
 
     def get_is_group(self):
         if self.has_user:
