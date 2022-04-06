@@ -2,7 +2,6 @@ from venmo_api import parse_amount, string_to_timestamp, User, BaseModel
 from enum import Enum
 
 
-
 class Payment(BaseModel):
     def __init__(
         self,

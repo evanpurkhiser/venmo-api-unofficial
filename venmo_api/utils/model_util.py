@@ -54,6 +54,7 @@ def random_device_id():
 
     return "".join(result)
 
+
 def parse_amount(amount: Union[str, float]):
     """
     Correctly parse amount values from a string or float representation
