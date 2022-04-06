@@ -26,6 +26,8 @@ class Transaction(BaseModel):
         device_used,
         actor,
         target,
+        payer,
+        payee,
         comments,
         json=None,
     ):
@@ -52,6 +54,9 @@ class Transaction(BaseModel):
 
         self.actor = actor
         self.target = target
+        self.payer = payer
+        self.payee = payee
+
         self._json = json
 
     @classmethod
@@ -81,6 +86,13 @@ class Transaction(BaseModel):
         comments = json.get("comments", {}).get("comments_list")
         comments = [Comment.from_json(json=comment) for comment in comments] if comments else []
 
+        if payment_json.get("action") == 'charge':
+            payer = target
+            payee = actor
+        else:
+            payer = actor
+            payee = target
+
         return cls(
             story_id=json.get("id"),
             payment_id=payment_json.get("id"),
@@ -95,6 +107,8 @@ class Transaction(BaseModel):
             device_used=device_used,
             actor=actor,
             target=target,
+            payer=payer,
+            payee=payee,
             comments=comments,
             json=json,
         )
