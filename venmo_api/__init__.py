@@ -2,6 +2,7 @@ from .utils.model_util import (
     string_to_timestamp,
     get_phone_model_from_json,
     random_device_id,
+    parse_amount
 )
 from .models.exception import *
 from .models.base_model import BaseModel

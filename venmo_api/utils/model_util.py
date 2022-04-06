@@ -1,6 +1,8 @@
 from datetime import datetime
+from decimal import Decimal
 from random import randint, choice
 from string import ascii_uppercase
+from typing import Union
 
 
 def string_to_timestamp(utc):
@@ -51,3 +53,9 @@ def random_device_id():
             result.append(choice(ascii_uppercase))
 
     return "".join(result)
+
+def parse_amount(amount: Union[str, float]):
+    """
+    Correctly parse amount values from a string or float representation
+    """
+    return int(Decimal(str(round(float(amount), 2))) * 100)

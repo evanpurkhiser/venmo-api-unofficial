@@ -1,12 +1,12 @@
-from decimal import Decimal
 from enum import Enum
 
 from venmo_api import (
     string_to_timestamp,
+    get_phone_model_from_json,
+    parse_amount,
     BaseModel,
     User,
     Comment,
-    get_phone_model_from_json,
 )
 
 
@@ -85,7 +85,7 @@ class Transaction(BaseModel):
             story_id=json.get("id"),
             payment_id=payment_json.get("id"),
             payment_type=payment_json.get("action"),
-            amount=int(Decimal(payment_json.get("amount")) * 100),
+            amount=parse_amount(payment_json.get("amount")),
             audience=json.get("audience"),
             note=payment_json.get("note"),
             status=payment_json.get("status"),
