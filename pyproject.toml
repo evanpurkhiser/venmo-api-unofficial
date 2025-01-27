@@ -16,7 +16,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [project]
-name = "venmo-api-unoffical"
+name = "venmo-api-unofficial"
 version = "0.1"
 description = "A python client to the undocumented Venmo API"
 authors = [
