@@ -17,7 +17,7 @@ verify_ssl = true
 
 [project]
 name = "venmo-api-unoffical"
-version = ""
+version = "0.1"
 description = "A python client to the undocumented Venmo API"
 authors = [
     {name = "Mark Mohades"},
